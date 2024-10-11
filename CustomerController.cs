@@ -64,5 +64,25 @@ namespace DBMS_CrashCourse
                 }
             }
         }
+
+        // Lesson 7 : SQL Introduction
+        public DataTable SearchCustomers(string searchTerm)
+        {
+            DataTable customersTable = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM Customer WHERE cusName LIKE @SearchTerm OR cusEmail LIKE @SearchTerm";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%");
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(customersTable);
+                    }
+                }
+            }
+            return customersTable;
+        }
+
     }
 }
